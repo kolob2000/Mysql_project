@@ -1,0 +1,31 @@
+DROP DATABASE IF EXISTS kinopoisk;
+CREATE DATABASE kinopoisk;
+USE kinopoisk;
+
+DROP TABLE IF EXISTS years;
+
+CREATE TABLE years
+(
+    id   TINYINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    year TINYINT UNSIGNED NOT NULL UNIQUE
+);
+DROP TABLE IF EXISTS genres;
+
+CREATE TABLE genres
+(
+    id    TINYINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    genre VARCHAR(50)
+);
+
+DROP TABLE IF EXISTS movies;
+CREATE TABLE movies
+(
+    id       SERIAL,
+    name     VARCHAR(50) COMMENT 'Название фильма',
+    genre_id TINYINT UNSIGNED NOT NULL,
+    year_id  TINYINT UNSIGNED NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (year_id) REFERENCES years (id),
+    FOREIGN KEY (genre_id) REFERENCES genres (id)
+);
+
