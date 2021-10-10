@@ -1,0 +1,13 @@
+movies
+shows
+animations
+likes
+users
+profiles
+genres
+actors
+creators
+creator_type
+posts
+reviews
+trailers
