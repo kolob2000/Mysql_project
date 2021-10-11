@@ -1,3 +1,20 @@
+-- наполняем таблицы --
+-- --------------------------------
+USE kinopoisk;
+-- наполним жанры из файла
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\genres.txt' INTO TABLE genres (genre);
+-- --------------------------------
+
+
+
+SELECT *
+FROM genres;
+
+
+SELECT genre FROM genres ORDER BY rand() LIMIT 1;
+
+
+
 # USE kinopoisk;
 #
 # INSERT INTO years (year)
@@ -46,29 +63,29 @@
 # LIMIT 1;
 #
 # USE shop;
-# SHOW TABLES;
-
-DROP PROCEDURE proizved;
-CREATE PROCEDURE proizved()
-BEGIN
-    DECLARE done INT DEFAULT FALSE;
-    DECLARE proiz BIGINT DEFAULT 1;
-    DECLARE b INT;
-    DECLARE cur_for_proiz CURSOR FOR SELECT value FROM shop.storehouses_products WHERE value IS NOT NULL AND value != 0;
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-    OPEN cur_for_proiz;
-
-    proizved_loop:
-    LOOP
-        FETCH cur_for_proiz INTO b;
-        IF done THEN
-            LEAVE proizved_loop;
-        END IF;
-        SET proiz := b * proiz;
-    END LOOP;
-    CLOSE cur_for_proiz;
-    SELECT proiz as proi;
-
-END;
-
-CALL proizved();
+# # SHOW TABLES;
+#
+# DROP PROCEDURE proizved;
+# CREATE PROCEDURE proizved()
+# BEGIN
+#     DECLARE done INT DEFAULT FALSE;
+#     DECLARE proiz BIGINT DEFAULT 1;
+#     DECLARE b INT;
+#     DECLARE cur_for_proiz CURSOR FOR SELECT value FROM shop.storehouses_products WHERE value IS NOT NULL AND value != 0;
+#     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+#     OPEN cur_for_proiz;
+#
+#     proizved_loop:
+#     LOOP
+#         FETCH cur_for_proiz INTO b;
+#         IF done THEN
+#             LEAVE proizved_loop;
+#         END IF;
+#         SET proiz := b * proiz;
+#     END LOOP;
+#     CLOSE cur_for_proiz;
+#     SELECT proiz as proi;
+#
+# END;
+#
+# CALL proizved();

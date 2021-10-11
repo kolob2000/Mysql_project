@@ -6,8 +6,8 @@ USE kinopoisk;
 DROP TABLE IF EXISTS genres;
 CREATE TABLE genres
 (
-    id    TINYINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    genre VARCHAR(50)
+    id    TINYINT UNSIGNED   NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    genre VARCHAR(50) UNIQUE NOT NULL
 );
 
 DROP TABLE IF EXISTS movie_types;
@@ -27,7 +27,7 @@ CREATE TABLE movies
     country       VARCHAR(255),
     movie_type_id BIGINT UNSIGNED  NOT NULL,
     description   TEXT,
-    count_likes BIGINT COMMENT 'Количество лайков (триггер)',
+    avg_rating    TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Средняя оцека (триггер)',
     PRIMARY KEY (id),
     FOREIGN KEY (movie_type_id) REFERENCES movie_types (id),
     FOREIGN KEY (genre_id) REFERENCES genres (id)
@@ -58,7 +58,7 @@ DROP TABLE IF EXISTS creator_type;
 CREATE TABLE creator_type
 (
     id    SERIAL,
-    title VARCHAR(255)
+    title VARCHAR(255) UNIQUE NOT NULL
 );
 
 DROP TABLE IF EXISTS creators;
@@ -77,12 +77,14 @@ CREATE TABLE creators
 DROP TABLE IF EXISTS movies_creator;
 CREATE TABLE movies_creator
 (
-    movies_id  BIGINT UNSIGNED NOT NULL,
-    creator_id BIGINT UNSIGNED NOT NULL,
+    movies_id      BIGINT UNSIGNED NOT NULL,
+    creator_id     BIGINT UNSIGNED NOT NULL,
+    creator_type_id BIGINT UNSIGNED NOT NULL,
 
-    PRIMARY KEY (movies_id, creator_id),
+    PRIMARY KEY (movies_id, creator_id, creator_type_id),
     FOREIGN KEY (movies_id) REFERENCES movies (id),
-    FOREIGN KEY (creator_id) REFERENCES creators (id)
+    FOREIGN KEY (creator_id) REFERENCES creators (id),
+    FOREIGN KEY (creator_type_id) REFERENCES creators(creator_type_id)
 );
 
 --  ------------------------------------------------------------------------------
@@ -136,11 +138,12 @@ CREATE TABLE profiles
     FOREIGN KEY (photo_id) REFERENCES media (id)
 );
 
-DROP TABLE IF EXISTS likes;
-CREATE TABLE likes
+DROP TABLE IF EXISTS movie_ratings;
+CREATE TABLE movie_ratings
 (
-    user_id  BIGINT UNSIGNED NOT NULL,
-    movie_id BIGINT UNSIGNED NOT NULL,
+    user_id  BIGINT UNSIGNED             NOT NULL,
+    movie_id BIGINT UNSIGNED             NOT NULL,
+    rate     ENUM ('1','2','3','4','5','6','7','8','9','10')  DEFAULT 1 COMMENT 'Лучше реализовть программно ограничение либо триггер',
 
     PRIMARY KEY (user_id, movie_id),
     FOREIGN KEY (user_id) REFERENCES users (id),
@@ -150,11 +153,28 @@ CREATE TABLE likes
 DROP TABLE IF EXISTS reviews;
 CREATE TABLE reviews
 (
-    user_id  BIGINT UNSIGNED NOT NULL,
-    movie_id BIGINT UNSIGNED NOT NULL,
-    body     TEXT,
+    id          SERIAL,
+    user_id     BIGINT UNSIGNED NOT NULL,
+    movie_id    BIGINT UNSIGNED NOT NULL,
+    body        TEXT,
+    created_at  DATETIME                 DEFAULT CURRENT_TIMESTAMP,
+    updated_ay  DATETIME                 DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    count_likes BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Количество лайков (триггер)',
 
     PRIMARY KEY (user_id, movie_id),
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (movie_id) REFERENCES movies (id)
 );
+
+DROP TABLE IF EXISTS likes;
+CREATE TABLE likes
+(
+    user_id   BIGINT UNSIGNED NOT NULL,
+    review_id BIGINT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (user_id, review_id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (review_id) REFERENCES reviews (id)
+);
+
+-- -------------------------------------------------
