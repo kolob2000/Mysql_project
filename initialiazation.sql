@@ -1,18 +1,38 @@
 -- наполняем таблицы --
 -- --------------------------------
 USE kinopoisk;
--- наполним жанры из файла
+-- 1. наполним жанры из файла
+
 LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\genres.txt' INTO TABLE genres (genre);
 -- --------------------------------
 
-
+-- 2. Наполним создателей
+INSERT INTO creator_type (id, title)
+VALUES (DEFAULT, 'режиссер'),
+       (DEFAULT, 'сценарист'),
+       (DEFAULT, 'оператор'),
+       (DEFAULT, 'звукорежиссер'),
+       (DEFAULT, 'композитор'),
+       (DEFAULT, 'костюмер'),
+       (DEFAULT, 'гриммер'),
+       (DEFAULT, 'декоратор'),
+       (DEFAULT, 'стилист'),
+       (DEFAULT, 'свет'),
+       (DEFAULT, 'коммерчиский директор')
+;
 
 SELECT *
 FROM genres;
 
+SELECT * FROM creator_type;
 
-SELECT genre FROM genres ORDER BY rand() LIMIT 1;
+DESCRIBE creator_type;
 
+# SELECT *
+# FROM genres;
+#
+#
+# SELECT genre FROM genres ORDER BY rand() LIMIT 1;
 
 
 # USE kinopoisk;
