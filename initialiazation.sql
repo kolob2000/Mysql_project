@@ -73,6 +73,18 @@ VALUES (DEFAULT, 1, 4, 'photo.jpg', 222222, DEFAULT, DEFAULT),
        (DEFAULT, 10, 4, 'photo.jpg', 222222, DEFAULT, DEFAULT),
        (DEFAULT, 11, 4, 'photo.jpg', 222222, DEFAULT, DEFAULT);
 
+INSERT INTO media(id, user_id, media_type_id, filename, size, created_at, updated_at)
+VALUES (DEFAULT, 1, 1, 'trailer.jpg', 222222, DEFAULT, DEFAULT),
+       (DEFAULT, 2, 1, 'trailer.jpg', 222222, DEFAULT, DEFAULT),
+       (DEFAULT, 3, 1, 'trailer.jpg', 222222, DEFAULT, DEFAULT),
+       (DEFAULT, 4, 1, 'trailer.jpg', 222222, DEFAULT, DEFAULT),
+       (DEFAULT, 5, 1, 'trailer.jpg', 222222, DEFAULT, DEFAULT),
+       (DEFAULT, 6, 1, 'trailer.jpg', 222222, DEFAULT, DEFAULT),
+       (DEFAULT, 7, 1, 'trailer.jpg', 222222, DEFAULT, DEFAULT),
+       (DEFAULT, 8, 1, 'trailer.jpg', 222222, DEFAULT, DEFAULT),
+       (DEFAULT, 9, 1, 'trailer.jpg', 222222, DEFAULT, DEFAULT),
+       (DEFAULT, 10, 1, 'trailer.jpg', 222222, DEFAULT, DEFAULT);
+
 
 -- 7. заполняем profiles
 INSERT IGNORE
@@ -114,10 +126,50 @@ VALUES (DEFAULT, 'В бой идут одни старики', FLOOR(1 + (RAND()
        (DEFAULT, 'Темнота', FLOOR(1 + (RAND() * 32)), FLOOR(1895 + (RAND() * 126)), 'Russia',
         FLOOR(1 + (RAND() * 7)), 'description', DEFAULT);
 
+-- 9. Заполним трэйлеры
+
+INSERT INTO trailers(id, title, media_id)
+VALUES (DEFAULT, 'Трейлер к фильму', 12),
+       (DEFAULT, 'Трейлер к фильму', 13),
+       (DEFAULT, 'Трейлер к фильму', 14),
+       (DEFAULT, 'Трейлер к фильму', 15),
+       (DEFAULT, 'Трейлер к фильму', 16),
+       (DEFAULT, 'Трейлер к фильму', 17),
+       (DEFAULT, 'Трейлер к фильму', 18),
+       (DEFAULT, 'Трейлер к фильму', 19),
+       (DEFAULT, 'Трейлер к фильму', 20),
+       (DEFAULT, 'Трейлер к фильму', 21);
+
+-- 10. Заполним связь trailers_movies
+INSERT INTO trailers_movies
+VALUES (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5),
+       (6, 6),
+       (7, 7),
+       (8, 8),
+       (9, 9),
+       (10, 10);
+-- 11. Наполним актеров
+
+INSERT INTO actors(id, first_name, last_name, birthday_at, country, biography)
+VALUES (DEFAULT, 'Djon', 'Travolta', STR_TO_DATE('11-03-1975', '%d-%m-%Y'), 'Usa', 'biography'),
+       (DEFAULT, 'Alexandr', 'Bezrukov', STR_TO_DATE('20-06-1979', '%d-%m-%Y'), 'Russia', 'biography'),
+       (DEFAULT, 'Semen', 'Svetlakov', STR_TO_DATE('3-05-1985', '%d-%m-%Y'), 'Russia', 'biography'),
+       (DEFAULT, 'Evgeniy', 'Pchelkin', STR_TO_DATE('31-05-1995', '%d-%m-%Y'), 'Russia', 'biography'),
+       (DEFAULT, 'Roman', 'Naumov', STR_TO_DATE('13-05-1965', '%d-%m-%Y'), 'Russia', 'biography'),
+       (DEFAULT, 'Oleg', 'Tabakov', STR_TO_DATE('25-05-1972', '%d-%m-%Y'), 'Russia', 'biography'),
+       (DEFAULT, 'Evgeniy', 'Smaktunovsky', STR_TO_DATE('2-09-1988', '%d-%m-%Y'), 'Russia', 'biography'),
+       (DEFAULT, 'Tatyana', 'Fedorova', STR_TO_DATE('16-08-1966', '%d-%m-%Y'), 'Russia', 'biography'),
+       (DEFAULT, 'Nikita', 'Michalkov', STR_TO_DATE('22-06-1954', '%d-%m-%Y'), 'Russia', 'biography'),
+       (DEFAULT, 'Semen', 'Habibulin', STR_TO_DATE('5-05-1983', '%d-%m-%Y'), 'Russia', 'biography');
 
 SELECT *
 FROM movies;
-
+SELECT *
+FROM actors;
 
 
 SELECT *
@@ -131,6 +183,9 @@ SELECT FLOOR(1895 + (RAND() * 126));
 SELECT movies.name 'Название', g.genre 'Жанр'
 FROM movies
          JOIN genres g ON movies.genre_id = g.id;
+
+SELECT *
+FROM media;
 
 # SELECT *
 # FROM genres;
