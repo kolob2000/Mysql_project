@@ -166,6 +166,44 @@ VALUES (DEFAULT, 'Djon', 'Travolta', STR_TO_DATE('11-03-1975', '%d-%m-%Y'), 'Usa
        (DEFAULT, 'Nikita', 'Michalkov', STR_TO_DATE('22-06-1954', '%d-%m-%Y'), 'Russia', 'biography'),
        (DEFAULT, 'Semen', 'Habibulin', STR_TO_DATE('5-05-1983', '%d-%m-%Y'), 'Russia', 'biography');
 
+-- 12. Наполним создателей
+
+INSERT creators(id, first_name, last_name, birthday_at, country, biography, creator_type_id)
+VALUES (DEFAULT, 'Роман', 'Башаров', STR_TO_DATE('11-03-1975', '%d-%m-%Y'), 'Russia', 'biography', 1),
+       (DEFAULT, 'Semen', 'Ermolin', STR_TO_DATE('22-06-1954', '%d-%m-%Y'), 'Usa', 'biography', 1),
+
+       (DEFAULT, 'Mickal', 'Cors', STR_TO_DATE('5-05-1983', '%d-%m-%Y'), 'Usa', 'biography', 2),
+       (DEFAULT, 'Gleb', 'Usupov', STR_TO_DATE('2-09-1988', '%d-%m-%Y'), 'Russia', 'biography', 2),
+
+       (DEFAULT, 'Роман', 'Ivanov', STR_TO_DATE('5-05-1983', '%d-%m-%Y'), 'Australia', 'biography', 3),
+       (DEFAULT, 'Nickita', 'Prudnickov', STR_TO_DATE('11-03-1975', '%d-%m-%Y'), 'Russia', 'biography', 3),
+
+       (DEFAULT, 'Anatoly', 'Petrov', STR_TO_DATE('2-09-1988', '%d-%m-%Y'), 'Ukraine', 'biography', 4),
+       (DEFAULT, 'Oleg', 'Roy', STR_TO_DATE('14-03-1965', '%d-%m-%Y'), 'Ussr', 'biography', 4),
+
+       (DEFAULT, 'Tomara', 'Gorbacheva', STR_TO_DATE('11-02-1976', '%d-%m-%Y'), 'Estonia', 'biography', 5),
+       (DEFAULT, 'Konstantin', 'Hlebnick', STR_TO_DATE('1-07-1985', '%d-%m-%Y'), 'Russia', 'biography', 5),
+
+       (DEFAULT, 'Timur', 'Antonov', STR_TO_DATE('15-03-1995', '%d-%m-%Y'), 'Latvia', 'biography', 6),
+       (DEFAULT, 'Sergey', 'Tachko', STR_TO_DATE('17-04-1972', '%d-%m-%Y'), 'Mexica', 'biography', 6),
+
+       (DEFAULT, 'Elena', 'Panovich', STR_TO_DATE('13-06-198', '%d-%m-%Y'), 'Francia', 'biography', 7),
+       (DEFAULT, 'Svetlana', 'Nevzorova', STR_TO_DATE('1-12-1985', '%d-%m-%Y'), 'Australia', 'biography', 7),
+
+       (DEFAULT, 'Gleb', 'Glebov', STR_TO_DATE('19-09-1934', '%d-%m-%Y'), 'Canada', 'biography', 8),
+       (DEFAULT, 'Ilya', 'Laushev', STR_TO_DATE('11-11-1967', '%d-%m-%Y'), 'Usa', 'biography', 8),
+
+       (DEFAULT, 'Alexandr', 'Boyarov', STR_TO_DATE('15-05-1975', '%d-%m-%Y'), 'Polsha', 'biography', 9),
+       (DEFAULT, 'Tom', 'Kurts', STR_TO_DATE('12-08-1955', '%d-%m-%Y'), 'China', 'biography', 9),
+
+       (DEFAULT, 'Richard', 'Velengton', STR_TO_DATE('10-03-1966', '%d-%m-%Y'), 'Germany', 'biography', 10),
+       (DEFAULT, 'Birma', 'Stuard', STR_TO_DATE('9-09-1999', '%d-%m-%Y'), 'Russia', 'biography', 10),
+
+       (DEFAULT, 'Patrick', 'Svayzy', STR_TO_DATE('11-06-1995', '%d-%m-%Y'), 'Usa', 'biography', 11),
+       (DEFAULT, 'Elena', 'Bautina', STR_TO_DATE('7-07-1992', '%d-%m-%Y'), 'Russia', 'biography', 11);
+SELECT *
+FROM creators;
+
 SELECT *
 FROM movies;
 SELECT *
