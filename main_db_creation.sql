@@ -87,6 +87,26 @@ CREATE TABLE movies_creator
     FOREIGN KEY (creator_type_id) REFERENCES creators (creator_type_id)
 );
 
+DROP TABLE IF EXISTS trailers;
+CREATE TABLE trailers
+(
+    id       SERIAL PRIMARY KEY,
+    title    VARCHAR(255),
+    media_id BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (media_id) REFERENCES media (id)
+
+);
+
+DROP TABLE IF EXISTS trailers_movies;
+CREATE TABLE trailers_movies
+(
+    movie_id   BIGINT UNSIGNED NOT NULL,
+    trailer_id BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (movie_id) REFERENCES movies (id),
+    FOREIGN KEY (trailer_id) REFERENCES trailers (id)
+);
+
+
 --  ------------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS users;
@@ -96,8 +116,10 @@ CREATE TABLE users
     login       VARCHAR(255) UNIQUE    NOT NULL,
     email       VARCHAR(255) UNIQUE    NOT NULL,
     phone       BIGINT UNSIGNED UNIQUE NOT NULL,
-    passwd_hash VARCHAR(255)
+    passwd_hash VARCHAR(255) UNIQUE NOT NULL
 );
+
+ALTER TABLE users CHANGE passwd_hash password_hash VARCHAR(255) UNIQUE  NOT NULL ;
 
 
 DROP TABLE IF EXISTS media_type;
@@ -166,6 +188,8 @@ CREATE TABLE reviews
     FOREIGN KEY (movie_id) REFERENCES movies (id)
 );
 
+ALTER TABLE reviews RENAME COLUMN updated_ay TO updated_at;
+
 DROP TABLE IF EXISTS likes;
 CREATE TABLE likes
 (
@@ -176,5 +200,5 @@ CREATE TABLE likes
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (review_id) REFERENCES reviews (id)
 );
-
+ALTER TABLE likes RENAME TO reviews_likes;
 -- -------------------------------------------------
