@@ -116,10 +116,11 @@ CREATE TABLE users
     login       VARCHAR(255) UNIQUE    NOT NULL,
     email       VARCHAR(255) UNIQUE    NOT NULL,
     phone       BIGINT UNSIGNED UNIQUE NOT NULL,
-    passwd_hash VARCHAR(255) UNIQUE NOT NULL
+    passwd_hash VARCHAR(255) UNIQUE    NOT NULL
 );
 
-ALTER TABLE users CHANGE passwd_hash password_hash VARCHAR(255) UNIQUE  NOT NULL ;
+ALTER TABLE users
+    DROP CONSTRAINT password_hash;
 
 
 DROP TABLE IF EXISTS media_type;

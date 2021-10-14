@@ -1,6 +1,23 @@
 -- наполняем таблицы --
 -- --------------------------------
 USE kinopoisk;
+
+-- ------------------- TRIGGERS ----------------------------
+-- likes_reviews
+DELIMITER //
+DROP TRIGGER count_likes;
+CREATE TRIGGER count_likes
+    AFTER INSERT
+    ON reviews_likes
+    FOR EACH ROW
+BEGIN
+    UPDATE reviews SET count_likes = (SELECT COUNT(review_id) FROM reviews_likes) WHERE id = new.review_id;
+END //
+DELIMITER ;
+
+-- ---------------------------------------------------------
+
+
 -- 1. наполним жанры из файла
 
 LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\genres.txt' INTO TABLE genres (genre);
@@ -201,6 +218,25 @@ VALUES (DEFAULT, 'Роман', 'Башаров', STR_TO_DATE('11-03-1975', '%d-%
 
        (DEFAULT, 'Patrick', 'Svayzy', STR_TO_DATE('11-06-1995', '%d-%m-%Y'), 'Usa', 'biography', 11),
        (DEFAULT, 'Elena', 'Bautina', STR_TO_DATE('7-07-1992', '%d-%m-%Y'), 'Russia', 'biography', 11);
+
+-- 13. наполним reviews
+
+DELIMITER //
+CREATE PROCEDURE reviews_filler()
+BEGIN
+    DECLARE counts INT DEFAULT 1000;
+    DECLARE mov BIGINT DEFAULT (SELECT COUNT(*) FROM movies);
+    DECLARE us BIGINT DEFAULT (SELECT COUNT(*) FROM users);
+    WHILE counts != 0
+        DO
+            INSERT IGNORE INTO reviews(id, user_id, movie_id, body, created_at, updated_at, count_likes)
+            VALUES (DEFAULT, FLOOR(1 + (RAND() * us)), FLOOR(1 + (RAND() * mov)), 'body', DEFAULT, DEFAULT, DEFAULT);
+            SET counts = counts - 1;
+        END WHILE;
+END//
+DELIMITER ;
+CALL reviews_filler;
+
 SELECT *
 FROM creators;
 
@@ -250,7 +286,8 @@ FROM media;
 #         (SELECT id FROM years WHERE year = 2019));
 # TRUNCATE movies;
 # TRUNCATE years;
-# DELIMITER //
+# DELIMITER
+//
 # CREATE PROCEDURE year_filler()
 #
 # BEGIN
@@ -262,7 +299,8 @@ FROM media;
 #         END WHILE;
 #
 # END;
-# //
+#
+//
 # DELIMITER ;
 #
 # DROP PROCEDURE year_filler;
