@@ -30,7 +30,8 @@ CREATE TABLE movies
     avg_rating    TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Средняя оцека (триггер) с ограничением 1-10',
     PRIMARY KEY (id),
     FOREIGN KEY (movie_type_id) REFERENCES movie_types (id),
-    FOREIGN KEY (genre_id) REFERENCES genres (id)
+    FOREIGN KEY (genre_id) REFERENCES genres (id),
+    INDEX idx_movie (name)
 );
 
 DROP TABLE IF EXISTS actors;
@@ -87,28 +88,6 @@ CREATE TABLE movies_creator
     FOREIGN KEY (creator_type_id) REFERENCES creators (creator_type_id)
 );
 
-DROP TABLE IF EXISTS trailers;
-CREATE TABLE trailers
-(
-    id       SERIAL PRIMARY KEY,
-    title    VARCHAR(255),
-    media_id BIGINT UNSIGNED NOT NULL,
-    FOREIGN KEY (media_id) REFERENCES media (id)
-
-);
-
-DROP TABLE IF EXISTS trailers_movies;
-CREATE TABLE trailers_movies
-(
-    movie_id   BIGINT UNSIGNED NOT NULL,
-    trailer_id BIGINT UNSIGNED NOT NULL,
-    FOREIGN KEY (movie_id) REFERENCES movies (id),
-    FOREIGN KEY (trailer_id) REFERENCES trailers (id)
-);
-
-
---  ------------------------------------------------------------------------------
-
 DROP TABLE IF EXISTS users;
 CREATE TABLE users
 (
@@ -116,12 +95,8 @@ CREATE TABLE users
     login       VARCHAR(255) UNIQUE    NOT NULL,
     email       VARCHAR(255) UNIQUE    NOT NULL,
     phone       BIGINT UNSIGNED UNIQUE NOT NULL,
-    passwd_hash VARCHAR(255) UNIQUE    NOT NULL
+    passwd_hash VARCHAR(255)     NOT NULL
 );
-
-ALTER TABLE users
-    DROP CONSTRAINT password_hash;
-
 
 DROP TABLE IF EXISTS media_type;
 CREATE TABLE media_type
@@ -145,6 +120,29 @@ CREATE TABLE media
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
+
+DROP TABLE IF EXISTS trailers;
+CREATE TABLE trailers
+(
+    id       SERIAL PRIMARY KEY,
+    title    VARCHAR(255),
+    media_id BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (media_id) REFERENCES media (id)
+
+);
+
+DROP TABLE IF EXISTS trailers_movies;
+CREATE TABLE trailers_movies
+(
+    movie_id   BIGINT UNSIGNED NOT NULL,
+    trailer_id BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (movie_id) REFERENCES movies (id),
+    FOREIGN KEY (trailer_id) REFERENCES trailers (id)
+);
+
+
+--  ------------------------------------------------------------------------------
+
 DROP TABLE IF EXISTS profiles;
 CREATE TABLE profiles
 (
@@ -156,6 +154,7 @@ CREATE TABLE profiles
     hometown    VARCHAR(255),
     photo_id    BIGINT UNSIGNED          DEFAULT NULL,
     created_at  DATETIME        NOT NULL DEFAULT NOW(),
+    INDEX idx_first_name_last_name (first_name, last_name),
 
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (photo_id) REFERENCES media (id)
@@ -203,3 +202,61 @@ CREATE TABLE likes
 );
 ALTER TABLE likes RENAME TO reviews_likes;
 -- -------------------------------------------------
+
+-- ------------------- TRIGGERS ----------------------------
+-- likes_reviews
+DELIMITER //
+DROP TRIGGER IF EXISTS count_likes //
+CREATE TRIGGER count_likes
+    AFTER INSERT
+    ON reviews_likes
+    FOR EACH ROW
+BEGIN
+    UPDATE reviews SET count_likes = (SELECT COUNT(review_id) FROM reviews_likes) WHERE id = new.review_id;
+END //
+DELIMITER ;
+
+-- movie_ratings
+
+DELIMITER //
+DROP TRIGGER IF EXISTS rating //
+CREATE TRIGGER rating
+    AFTER INSERT
+    ON movie_ratings
+    FOR EACH ROW
+BEGIN
+    UPDATE movies SET avg_rating = (SELECT AVG(rate) FROM movie_ratings) WHERE id = new.movie_id;
+END //
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
