@@ -95,7 +95,7 @@ CREATE TABLE users
     login       VARCHAR(255) UNIQUE    NOT NULL,
     email       VARCHAR(255) UNIQUE    NOT NULL,
     phone       BIGINT UNSIGNED UNIQUE NOT NULL,
-    passwd_hash VARCHAR(255)     NOT NULL
+    passwd_hash VARCHAR(255)           NOT NULL
 );
 
 DROP TABLE IF EXISTS media_type;
@@ -212,12 +212,15 @@ CREATE TRIGGER count_likes
     ON reviews_likes
     FOR EACH ROW
 BEGIN
-    UPDATE reviews SET count_likes = (SELECT COUNT(review_id) FROM reviews_likes) WHERE id = new.review_id;
+    UPDATE reviews
+    SET count_likes = (SELECT COUNT(*) FROM reviews_likes WHERE review_id = new.review_id)
+    WHERE id = new.review_id;
 END //
 DELIMITER ;
-
+SELECT COUNT(*)
+FROM reviews_likes
+WHERE review_id = 78;
 -- movie_ratings
-
 DELIMITER //
 DROP TRIGGER IF EXISTS rating //
 CREATE TRIGGER rating
@@ -225,7 +228,7 @@ CREATE TRIGGER rating
     ON movie_ratings
     FOR EACH ROW
 BEGIN
-    UPDATE movies SET avg_rating = (SELECT AVG(rate) FROM movie_ratings) WHERE id = new.movie_id;
+    UPDATE movies SET avg_rating = (SELECT AVG(rate) FROM movie_ratings WHERE movie_id =  NEW.movie_id) WHERE id = new.movie_id;
 END //
 DELIMITER ;
 

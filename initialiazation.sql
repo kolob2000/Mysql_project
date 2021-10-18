@@ -247,5 +247,22 @@ END //
 DELIMITER ;
 CALL rating_filler();
 
+DELIMITER //
+DROP PROCEDURE IF EXISTS reviews_likes_filler;
+CREATE PROCEDURE reviews_likes_filler()
+BEGIN
+    DECLARE counts INT DEFAULT 1000;
+    DECLARE us INT DEFAULT (SELECT COUNT(*) FROM users);
+    DECLARE rv INT DEFAULT (SELECT COUNT(*) FROM reviews);
+    WHILE counts != 0
+        DO
+            INSERT IGNORE INTO reviews_likes(user_id, review_id)
+            VALUES (FLOOR(1 + (RAND() * us)), FLOOR(1 + (RAND() * rv)));
+            SET counts = counts - 1;
+        END WHILE;
+END //
+DELIMITER ;
+CALL reviews_likes_filler;
+
 
 -- --------------------------------------
