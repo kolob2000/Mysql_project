@@ -203,34 +203,7 @@ CREATE TABLE likes
 ALTER TABLE likes RENAME TO reviews_likes;
 -- -------------------------------------------------
 
--- ------------------- TRIGGERS ----------------------------
--- likes_reviews
-DELIMITER //
-DROP TRIGGER IF EXISTS count_likes //
-CREATE TRIGGER count_likes
-    AFTER INSERT
-    ON reviews_likes
-    FOR EACH ROW
-BEGIN
-    UPDATE reviews
-    SET count_likes = (SELECT COUNT(*) FROM reviews_likes WHERE review_id = new.review_id)
-    WHERE id = new.review_id;
-END //
-DELIMITER ;
-SELECT COUNT(*)
-FROM reviews_likes
-WHERE review_id = 78;
--- movie_ratings
-DELIMITER //
-DROP TRIGGER IF EXISTS rating //
-CREATE TRIGGER rating
-    AFTER INSERT
-    ON movie_ratings
-    FOR EACH ROW
-BEGIN
-    UPDATE movies SET avg_rating = (SELECT AVG(rate) FROM movie_ratings WHERE movie_id =  NEW.movie_id) WHERE id = new.movie_id;
-END //
-DELIMITER ;
+
 
 
 
