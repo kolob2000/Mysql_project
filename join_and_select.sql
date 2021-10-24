@@ -38,6 +38,7 @@ FROM movies m
 
 -- ----- users information
 
+
 CREATE OR REPLACE VIEW users_info AS
 SELECT CONCAT(p.first_name, ' ', p.last_name)                               AS name,
        TIMESTAMPDIFF(YEAR, p.birthday_at, CURDATE())                        AS age,
