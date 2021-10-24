@@ -8,6 +8,7 @@ USE kinopoisk;
 
 
 -- likes_reviews
+
 DELIMITER //
 DROP TRIGGER IF EXISTS count_likes //
 CREATE TRIGGER count_likes

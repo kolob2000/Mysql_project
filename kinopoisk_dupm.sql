@@ -17,6 +17,7 @@
 
 --
 -- Table structure for table `actors`
+
 --
 
 DROP TABLE IF EXISTS `actors`;
@@ -236,8 +237,10 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rating` AFTER INSERT ON `movie_ratings` FOR EACH ROW BEGIN
-    UPDATE movies SET avg_rating = (SELECT AVG(rate) FROM movie_ratings WHERE movie_id =  NEW.movie_id) WHERE id = new.movie_id;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `rating` AFTER INSERT ON `movie_ratings` FOR EACH ROW BEGIN
+
+    UPDATE movies SET avg_rating = (SELECT AVG(rate) FROM movie_ratings WHERE movie_id =  NEW.movie_id) WHERE id = new.movie_id;
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -463,10 +466,14 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `count_likes` AFTER INSERT ON `reviews_likes` FOR EACH ROW BEGIN
-    UPDATE reviews
-    SET count_likes = (SELECT COUNT(*) FROM reviews_likes WHERE review_id = new.review_id)
-    WHERE id = new.review_id;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `count_likes` AFTER INSERT ON `reviews_likes` FOR EACH ROW BEGIN
+
+    UPDATE reviews
+
+    SET count_likes = (SELECT COUNT(*) FROM reviews_likes WHERE review_id = new.review_id)
+
+    WHERE id = new.review_id;
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
